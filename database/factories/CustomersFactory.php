@@ -22,8 +22,8 @@ class CustomersFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'address' => $this->faker->address,
             'document' => $this->faker->unique()->randomNumber(8),
-            'company_id' => $this->faker->numberBetween(1, 1),
-            'user_id' => $this->faker->numberBetween(1, 1),
+            'company_id' => $this->faker->numberBetween(1, 2),
+            'user_id' => $this->faker->numberBetween(1, 2),
             'created_at' => now(),
             'updated_at' => now(),
         ];

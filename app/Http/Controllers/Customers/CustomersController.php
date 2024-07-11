@@ -5,8 +5,7 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Models\Customers;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class CustomersController extends Controller
 {
@@ -15,8 +14,8 @@ class CustomersController extends Controller
      */
     public function index()
     {
-        // $company = Auth::user()->company_id;
-        $customers = Customers::get(['id', 'name', 'email', 'phone', 'address', 'document'])->all();
+        $company = Auth::user()->company_id;
+        $customers = Customers::where('company_id', '=', $company)->get(['id', 'name', 'email', 'phone', 'address', 'document'])->all();
 
         return response()->json($customers);
     }
@@ -26,7 +25,29 @@ class CustomersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'phone' => 'string|min:10|max:15',
+            'email' => 'required|email',
+            'address' => 'required|string',
+            'document' => 'required|string|min:7|max:10',
+        ]);
+
+        try {
+            $customer = new Customers();
+            $customer->name = $request->name;
+            $customer->phone = $request->phone;
+            $customer->email = $request->email;
+            $customer->address = $request->address;
+            $customer->document = $request->document;
+            $customer->company_id = Auth::user()->company_id;
+            $customer->user_id = Auth::user()->id;
+            $customer->save();
+
+            return response()->json(['message' => 'Customer created', $customer], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -52,6 +73,12 @@ class CustomersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $customer = Customers::find($id);
+        try {
+            $customer->delete();
+            return response()->json(['message' => 'Customer deleted'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
