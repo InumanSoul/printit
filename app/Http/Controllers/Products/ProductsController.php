@@ -15,7 +15,7 @@ class ProductsController extends Controller
     public function index()
     {
         $company = Auth::user()->company_id;
-        $products = Products::where('company_id', '=', $company)->get(['id', 'name', 'description', 'price', 'category_id'])->all();
+        $products = Products::where('company_id', '=', $company)->get(['id', 'image', 'name', 'description', 'price', 'category_id'])->all();
 
         return response()->json($products);
     }
