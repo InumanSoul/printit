@@ -15,7 +15,7 @@ class CustomersController extends Controller
     public function index()
     {
         $company = Auth::user()->company_id;
-        $customers = Customers::where('company_id', '=', $company)->get(['id', 'name', 'email', 'phone', 'address', 'document'])->all();
+        $customers = Customers::where('company_id', '=', $company)->paginate(10);
 
         return response()->json($customers);
     }

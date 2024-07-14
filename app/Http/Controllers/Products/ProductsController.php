@@ -15,7 +15,7 @@ class ProductsController extends Controller
     public function index()
     {
         $company = Auth::user()->company_id;
-        $products = Products::where('company_id', '=', $company)->get(['id', 'image', 'name', 'description', 'price', 'category_id'])->all();
+        $products = Products::where('company_id', '=', $company)->paginate(10);
 
         return response()->json($products);
     }
@@ -25,7 +25,22 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $company = Auth::user()->company_id;
+
+        $request->validate([
+            'name' => 'required|min:3',
+            'description' => 'min:3',
+            'price' => 'required',
+            'category_id' => 'required',
+        ]);
+        
+        $product = new Products();
+        $product->company_id = $company;
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->save();
     }
 
     /**
@@ -51,6 +66,9 @@ class ProductsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $product = Products::find($id);
+        $product->delete();
+
+        return response()->json(['message' => 'Product deleted']);
     }
 }
