@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Customers;
+namespace App\Http\Controllers\Contacts;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customers;
+use App\Models\Contacts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CustomersController extends Controller
+class ContactsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +15,10 @@ class CustomersController extends Controller
     public function index()
     {
         $company = Auth::user()->company_id;
-        $customers = Customers::where('company_id', '=', $company)->paginate(10);
 
-        return response()->json($customers);
+        $contacts = Contacts::where('company_id', '=', $company)->paginate(10);
+
+        return response()->json($contacts);
     }
 
     /**
@@ -34,17 +35,18 @@ class CustomersController extends Controller
         ]);
 
         try {
-            $customer = new Customers();
-            $customer->name = $request->name;
-            $customer->phone = $request->phone;
-            $customer->email = $request->email;
-            $customer->address = $request->address;
-            $customer->document = $request->document;
-            $customer->company_id = Auth::user()->company_id;
-            $customer->user_id = Auth::user()->id;
-            $customer->save();
+            $contact = new Contacts();
+            $contact->name = $request->name;
+            $contact->phone = $request->phone;
+            $contact->email = $request->email;
+            $contact->address = $request->address;
+            $contact->document = $request->document;
+            $contact->contacts_type = $request->contacts_type;
+            $contact->company_id = Auth::user()->company_id;
+            $contact->user_id = Auth::user()->id;
+            $contact->save();
 
-            return response()->json(['message' => 'Customer created', $customer], 200);
+            return response()->json(['message' => 'Customer created', $contact], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -55,9 +57,9 @@ class CustomersController extends Controller
      */
     public function show(string $id)
     {
-        $customer = Customers::find($id);
+        $contact = Contacts::find($id);
 
-        return response()->json($customer);
+        return response()->json($contact);
     }
 
     /**
@@ -73,10 +75,10 @@ class CustomersController extends Controller
      */
     public function destroy(string $id)
     {
-        $customer = Customers::find($id);
+        $contact = Contacts::find($id);
         try {
-            $customer->delete();
-            return response()->json(['message' => 'Customer deleted'], 200);
+            $contact->delete();
+            return response()->json(['message' => 'Contact deleted'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
