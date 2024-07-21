@@ -41,6 +41,8 @@ class ProductsController extends Controller
         $product->price = $request->price;
         $product->category_id = $request->category_id;
         $product->save();
+
+        $product->taxes()->sync($request->tax_ids);
     }
 
     /**

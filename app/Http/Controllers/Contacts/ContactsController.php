@@ -12,13 +12,34 @@ class ContactsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $company = Auth::user()->company_id;
+        $query = Contacts::where('company_id', '=', $company);
 
-        $contacts = Contacts::where('company_id', '=', $company)->paginate(10);
+        if ($request->has('contacts_type')) {
+            $query->where('contacts_type', $request->input('contacts_type'));
+        }
 
-        return response()->json($contacts);
+        if ($request->has('query')) {
+            $search = $request->input('query');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('document', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $contacts = $query->paginate(10);
+        $lastUpdate = Contacts::where('company_id', '=', $company)->max('updated_at');
+        $recentlyAdded = Contacts::where('company_id', '=', $company)->where('created_at', '>=', now()->subDays(3))->count();
+
+        return response()->json([
+            'data' => $contacts->toArray(),
+            'recently_added' => $recentlyAdded,
+            'last_update' => $lastUpdate,
+        ]);
     }
 
     /**

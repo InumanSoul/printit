@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             CategoriesTableSeeder::class,
             ProductsTableSeeder::class,
             ContactsTableSeeder::class,
+            TaxesTableSeeder::class,
+            ExpensesTableSeeder::class,
         ]);
     }
 }

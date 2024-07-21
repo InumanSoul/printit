@@ -21,6 +21,7 @@ class Contacts extends Model
         'contacts_type',
         'user_id',
         'company_id',
+        'updated_at',
     ];
 
     public function users()

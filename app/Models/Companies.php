@@ -28,8 +28,8 @@ class Companies extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function customers()
+    public function contacts()
     {
-        return $this->hasMany(Customers::class);
+        return $this->hasMany(Contacts::class);
     }
 }

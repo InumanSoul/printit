@@ -11,3 +11,5 @@ Route::apiResource('contacts', 'App\Http\Controllers\Contacts\ContactsController
 Route::apiResource('companies', 'App\Http\Controllers\Customers\CompaniesController')->middleware('auth:sanctum');
 Route::apiResource('categories', 'App\Http\Controllers\Categories\CategoriesController')->middleware('auth:sanctum');
 Route::apiResource('products', 'App\Http\Controllers\Products\ProductsController')->middleware('auth:sanctum');
+Route::apiResource('expenses', 'App\Http\Controllers\Expenses\ExpensesController')->middleware('auth:sanctum');
+Route::apiResource('taxes', 'App\Http\Controllers\Taxes\TaxesController')->middleware('auth:sanctum');
