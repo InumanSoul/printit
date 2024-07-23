@@ -12,12 +12,30 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $company = Auth::user()->company_id;
-        $products = Products::where('company_id', '=', $company)->paginate(10);
+        $query = Products::where('company_id', '=', $company);
 
-        return response()->json($products);
+        if ($request->has('query')) {
+            $search = $request->input('query');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('phone', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%")
+                    ->orWhere('document', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $products = $query->paginate(10);
+        $lastUpdate = Products::where('company_id', '=', $company)->max('updated_at');
+        $recentlyAdded = Products::where('company_id', '=', $company)->where('created_at', '>=', now()->subDays(3))->count();
+
+        return response()->json([
+            'data' => $products->toArray(),
+            'recently_added' => $recentlyAdded,
+            'last_update' => $lastUpdate,
+        ]);
     }
 
     /**

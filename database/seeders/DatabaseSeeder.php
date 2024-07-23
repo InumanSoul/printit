@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             ContactsTableSeeder::class,
             TaxesTableSeeder::class,
             ExpensesTableSeeder::class,
+            RolesTableSeeder::class,
         ]);
     }
 }

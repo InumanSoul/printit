@@ -13,6 +13,21 @@ class PlansTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Plans::factory(3)->create();
+        $plans = [
+            [
+                'name' => 'Printit Free',
+                'description' => 'Printit flee plan'
+            ],
+            [
+                'name' => 'Printit Pro',
+                'description' => 'Printit pro plan'
+            ],
+            [
+                'name' => 'Printit Enterprise',
+                'description' => 'Printit enterprise plan'
+            ]
+        ];
+
+        Plans::factory()->createMany($plans);
     }
 }

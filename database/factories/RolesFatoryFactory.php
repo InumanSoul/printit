@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Plans>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class PlansFactory extends Factory
+class RolesFatoryFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,8 +17,7 @@ class PlansFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
-            'description' => $this->faker->text,
+            'name' => $this->faker->word,
         ];
     }
 }

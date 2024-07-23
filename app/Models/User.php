@@ -33,6 +33,26 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class);
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles()->where('name', $role)->exists();
+    }
+
+    public function permissions()
+    {
+        return $this->roles->map->permissions->flatten()->pluck('name')->unique();
+    }
+
+    public function hasPermission($permission)
+    {
+        return $this->permissions->contains($permission);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
