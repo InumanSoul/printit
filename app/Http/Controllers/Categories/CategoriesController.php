@@ -14,13 +14,20 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $categoryType = $request->query('category_type', 'product');
-        $categories = Categories::where('category_type', $categoryType)->where(
+        $categoryType = $request->query('category_type', null);
+
+        $categoriesQuery = Categories::query();
+
+        if ($categoryType) {
+            $categoriesQuery->where('category_type', $categoryType);
+        }
+
+        $categories = $categoriesQuery->where(
             function ($query) use ($request) {
                 $query->where('company_id', Auth::user()->company_id)
                     ->orWhere('is_shared', true);
             }
-        )->get();
+        )->get(['id', 'name']);
 
         return response()->json($categories);
     }
@@ -30,7 +37,19 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:3',
+            'category_type' => 'required',
+        ]);
+
+        $category = new Categories();
+        $category->name = $request->name;
+        $category->category_type = $request->category_type;
+        $category->company_id = Auth::user()->company_id;
+        $category->is_shared = false;
+        $category->save();
+
+        return response()->json($category);
     }
 
     /**

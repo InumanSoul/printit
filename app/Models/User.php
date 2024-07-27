@@ -34,9 +34,20 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'role',
+        'initials',
+        'company_name'
+    ];
+
     public function roles()
     {
         return $this->belongsToMany(Roles::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Companies::class);
     }
 
     public function hasRole($role)
@@ -52,6 +63,26 @@ class User extends Authenticatable
     public function hasPermission($permission)
     {
         return $this->permissions->contains($permission);
+    }
+
+    public function getInitialsAttribute()
+    {
+        $name = explode(' ', $this->name);
+        $initials = '';
+        foreach ($name as $n) {
+            $initials .= $n[0];
+        }
+        return $initials;
+    }
+
+    public function getCompanyNameAttribute()
+    {
+        return $this->company->name;
+    }
+
+    public function getRoleAttribute()
+    {
+        return $this->roles->first()->name;
     }
 
     /**
