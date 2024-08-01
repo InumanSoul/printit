@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('expense_tax', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('expense_id')->constrained('expenses');
-            $table->foreignId('tax_id')->constrained('taxes');
+            $table->foreignId('expenses_id')->constrained('expenses');
+            $table->foreignId('taxes_id')->constrained('taxes');
             $table->timestamps();
         });
     }

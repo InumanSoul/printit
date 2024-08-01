@@ -27,7 +27,7 @@ class CategoriesController extends Controller
                 $query->where('company_id', Auth::user()->company_id)
                     ->orWhere('is_shared', true);
             }
-        )->get(['id', 'name']);
+        )->get(['id', 'name', 'is_shared', 'category_type']);
 
         return response()->json($categories);
     }
@@ -73,6 +73,22 @@ class CategoriesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Categories::where('id', $id)->first();
+
+        if (!$category) {
+            return response()->json(['message' => 'Categoría no encontrada'], 404);
+        }
+
+        if ($category->is_shared) {
+            return response()->json(['message' => 'No se puede eliminar una categoría predeterminada'], 403);
+        }
+
+        try {
+            $category->delete();
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'No se pudo eliminar la categoría'], 500);
+        }
+
+        return response()->json(['message' => 'Categoria eliminada'], 200);
     }
 }

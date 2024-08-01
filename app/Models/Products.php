@@ -12,7 +12,6 @@ class Products extends Model
     protected $table = 'products';
 
     protected $fillable = [
-        'id',
         'image',
         'name',
         'description',
@@ -26,9 +25,23 @@ class Products extends Model
         'category_id',
         'company_id',
         'user_id',
-        'created_at',
         'updated_at',
     ];
+
+    protected $appends = [
+        'category_name',
+        'tax_name'
+    ];
+
+    public function getCategoryNameAttribute()
+    {
+        return $this->category->name;
+    }
+
+    public function getTaxNameAttribute()
+    {
+        return $this->taxes->pluck('name');
+    }
 
     public function company()
     {
