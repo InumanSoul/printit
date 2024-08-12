@@ -21,11 +21,10 @@ class ExpensesFactory extends Factory
             'amount' => $this->faker->numberBetween(100, 500),
             'document_path' => $this->faker->word,
             'expense_date' => $this->faker->date(),
-            'contact_id' => $this->faker->numberBetween(1, 20),
+            'contact_id' => $this->faker->numberBetween(1, 10),
             'company_id' => $this->faker->numberBetween(1, 2),
             'category_id' => $this->faker->numberBetween(1, 2),
-            'user_id' => $this->faker->numberBetween(1, 2),
-            'updated_at' => now(),
+            'user_id' => 1,
         ];
     }
 }

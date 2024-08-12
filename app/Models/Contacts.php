@@ -23,6 +23,15 @@ class Contacts extends Model
         'updated_at',
     ];
 
+    protected $appends = ['initials'];
+
+    public function getInitialsAttribute()
+    {
+        $name = explode(' ', $this->name);
+
+        return strtoupper($name[0][0] . $name[1][0]);
+    }
+
     public function users()
     {
         return $this->belongsTo(User::class, 'id', 'user_id');

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('description');
             $table->integer('amount');
             $table->string('document_path')->nullable();
-            $table->string('expense_date');
+            $table->dateTime('expense_date');
             $table->foreignId('contact_id')->constrained('contacts');
             $table->foreignId('category_id')->constrained('categories');
             $table->foreignId('company_id')->constrained('companies');
