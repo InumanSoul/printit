@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Customers;
+namespace App\Http\Controllers\Taxes;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customers;
+use App\Models\Taxes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-
-
-class CustomersController extends Controller
+class TaxesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        // $company = Auth::user()->company_id;
-        $customers = Customers::get(['id', 'name', 'email', 'phone', 'address', 'document'])->all();
+        $company = Auth::user()->company_id;
 
-        return response()->json($customers);
+        $taxes = Taxes::where('company_id', '=', $company)->orWhere('is_shared', true)->paginate(10);
+
+        return response()->json($taxes);
     }
 
     /**
@@ -34,9 +34,7 @@ class CustomersController extends Controller
      */
     public function show(string $id)
     {
-        $customer = Customers::find($id);
-
-        return response()->json($customer);
+        //
     }
 
     /**

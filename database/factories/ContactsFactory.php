@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Customers>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contacts>
  */
-class CustomersFactory extends Factory
+class ContactsFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -22,8 +22,9 @@ class CustomersFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'address' => $this->faker->address,
             'document' => $this->faker->unique()->randomNumber(8),
-            'company_id' => $this->faker->numberBetween(1, 1),
-            'user_id' => $this->faker->numberBetween(1, 1),
+            'company_id' => $this->faker->numberBetween(1, 2),
+            'contacts_type' => $this->faker->randomElement(['supplier', 'customer']),
+            'user_id' => $this->faker->numberBetween(1, 2),
             'created_at' => now(),
             'updated_at' => now(),
         ];
